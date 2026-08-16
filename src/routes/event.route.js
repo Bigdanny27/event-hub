@@ -1,7 +1,8 @@
 import { Router } from "express"
 import { createEvent, getAllEvents, getOneEvent, updateEvent, deleteEvent, restoreEvent } from "../controllers/event.controller.js"
-import { authenticate, authorize } from "../middlewares/authentication.middleware.js"
-import { uploadCloudinary } from "../middlewares/upload.middleware"
+import { authenticate } from "../middlewares/authentication.middleware.js"
+import { authorize } from "../middlewares/role.middleware.js"
+import { uploadCloudinary } from "../middlewares/upload.middleware.js"
 
 const router = Router()
 

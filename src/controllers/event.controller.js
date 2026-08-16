@@ -42,7 +42,7 @@ export const createEvent = async (req, res) => {
 
 export const getAllEvents = async (req, res) => {
     try {
-        const { search, location, category, sort = "newest", page = 1, limit = 10} = req.query;
+        const { search, location, category, sort = "newest", page = "1", limit = "10" } = req.query;
 
         const filter = {}
 
@@ -58,82 +58,79 @@ export const getAllEvents = async (req, res) => {
         if (category) {
             filter.category = category
         }
+
         let sortOption = {}
-        if (sort === "newest"){
-            sortOption = {createdAt: -1}
-        }else if(sort === "oldest"){
-            sortOption = {createdAt: 1}
-        }else if(sort === "alphabetical"){
-            sortOption = {title: 1}
-        }else if(sort === "reverseAlphabetical"){
-            sortOption = {title: -1}
+        if (sort === "newest") {
+            sortOption = { createdAt: -1 }
+        } else if (sort === "oldest") {
+            sortOption = { createdAt: 1 }
+        } else if (sort === "alphabetical") {
+            sortOption = { title: 1 }
+        } else if (sort === "reverseAlphabetical") {
+            sortOption = { title: -1 }
         }
 
-        const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
-        const skip = (page - 1) * limit;
+        const pageNumber = parseInt(page, 10) || 1;
+        const limitNumber = parseInt(limit, 10) || 10;
+        const skip = (pageNumber - 1) * limitNumber;
 
-        // const pageNumber = Number(page)
-        // const limitNumber = Number(limit)
-        // const skip = (pageNumber - 1) * limitNumber; This is another way of writing pagination 
-
-        const evenyts = await Event.find(filter)
-        .populate("organizer", "name", "lastname", "email")
-        .sort(sortOption)
-        .skip(skip)
-        .limit(limitNumber)
+        const events = await Event.find(filter)
+            .populate("organizer", "name", "lastname", "email")
+            .sort(sortOption)
+            .skip(skip)
+            .limit(limitNumber)
 
         const totalEvents = await Event.countDocuments(filter)
 
         return res.status(200).json({
-            message: "Event retrieved sucessfully",
+            message: "Event retrieved successfully",
             totalEvents,
-            currentPage: page,
-            totalPages: Math.ceil(totalEvents / limit),
-            event
+            currentPage: pageNumber,
+            totalPages: Math.ceil(totalEvents / limitNumber),
+            events
         })
     } catch (error) {
-        return res.status(500).json(
-            {
-                message: " Failed to retrieve events",
-                error: error.message
-            }
-        )
+        return res.status(500).json({
+            message: "Failed to retrieve events",
+            error: error.message
+        })
     }
 }
 
 export const getOneEvent = async (req, res) => {
     try {
-        const { Id } = req.params.id
-        const event = await Event.findById(Id).populate("organizer", "name", "lastnme", "email")
+        const { id } = req.params
+        const event = await Event.findById(id).populate("organizer", "name", "lastname", "email")
 
-        if(!event){
+        if (!event) {
             return res.status(404).json({
                 message: "Event not found"
             })
         }
-        return res.staus(200).json({
+
+        return res.status(200).json({
             message: "Event successfully found",
             event
         })
     } catch (error) {
-        return res.status(500).json(
-            {
-                message: " Failed to found event",
-                error: error.message
-            }
-        )
+        return res.status(500).json({
+            message: "Failed to find event",
+            error: error.message
+        })
     }
 }
 export const updateEvent = async (req, res) => {
     try {
-        const {title, description, location, date, time, category, capacity, availableTickets} = req.body
-        if(!title || !description || !location || !date || !time || !category || !capacity || !availableTickets){
+        const { title, description, location, date, time, category, capacity, availableTickets } = req.body
+        if (!title || !description || !location || !date || !time || !category || !capacity || !availableTickets) {
             return res.status(400).json({
-                message: "All field are required before updating an event"
+                message: "All fields are required before updating an event"
             })
         }
-        const updatedEvent = await Event.findByIdAndUpdate(req.params.id, req.body, {new:true})
+
+        const { id } = req.params
+        const updatedEvent = await Event.findByIdAndUpdate(id, req.body, { new: true })
+
         return res.status(200).json({
             message: "Event updated successfully",
             event: updatedEvent
@@ -147,14 +144,18 @@ export const updateEvent = async (req, res) => {
 }
 export const deleteEvent = async (req, res) => {
     try {
-        const event = await Event.findById(req.params.id)
-        if(!event){
+        const { id } = req.params
+        const event = await Event.findById(id)
+
+        if (!event) {
             return res.status(404).json({
-                message: "event not found"
+                message: "Event not found"
             })
         }
-        course.deleteAt = new Date()
+
+        event.deletedAt = new Date()
         await event.save()
+
         return res.status(200).json({
             message: "Event deleted successfully"
         })
@@ -167,21 +168,23 @@ export const deleteEvent = async (req, res) => {
 }
 export const restoreEvent = async (req, res) => {
     try {
-        const { id } = req.params;
-        const course = await Event.findById(id)
-        if(!event){
+        const { id } = req.params
+        const event = await Event.findById(id)
+
+        if (!event) {
             return res.status(400).json({
                 message: "Event not found"
             })
         }
+
         event.deletedAt = null
-        await course.save()
+        await event.save()
+
         return res.status(200).json({
-            message: "Event retored successfully",
+            message: "Event restored successfully",
             event
         })
-    }
-    catch (error) {
+    } catch (error) {
         return res.status(500).json({
             message: "Failed to restore event",
             error: error.message
