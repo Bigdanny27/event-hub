@@ -142,6 +142,53 @@ export const updateEvent = async (req, res) => {
         })
     }
 }
+export const updateOwnEvent = async (req, res) => {
+    try {
+        const { id } = req.params
+        const updatedEvent = await Event.findOneAndUpadte({_id: id, organizer: req.user_id}, req.body, {new: true, runValidators: true})
+        
+        if(!updateEvent) {
+            return res.status(400).json({
+                message: "You are not the organizer of this event"
+            })
+        }
+        return res.status(200).json({
+            message: "Event updated successfully",
+            event: updatedEvent
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "Failed to update event",
+            error: error.message
+        })
+    }
+}
+
+export const cancelOwnEvent = async (req, res) => {
+    try {
+        const event = await Event.findOne({
+            _id: req.params.id,
+            organizer: req.user._id
+        })
+        if(!eventt){
+            return res.status(404).json({
+                message: "Event not found"
+            })
+        }
+        event.status = "cancelled"
+        await event.save()
+        return res.status(200).json({
+            message: "Event cancelled successfully"
+        })
+    } catch (error) {
+       res.status(500).json({
+            message: "internal server error",
+            error: error.message
+        }) 
+    }
+}
+
+
 export const deleteEvent = async (req, res) => {
     try {
         const { id } = req.params
