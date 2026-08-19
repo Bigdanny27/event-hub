@@ -30,10 +30,10 @@ const eventSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    category: {
-        type: String,
-        required: true,
-        enum: ["Conference", "Concert", "Workshop", "Sports", "Others"]
+    category:{
+       type: mongoose.Schema.Types.ObjectId,
+       ref: "Category",
+       required: true
     },
     organizer: {
         type: mongoose.Schema.Types.ObjectId,

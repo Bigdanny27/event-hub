@@ -15,8 +15,20 @@ const ticketSchema = new mongoose.Schema({
    price: {
     type: String,
     required: true,
-    min: o
+    min: 0
    },
+   organizer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+   },
+   
+   ticketType: {
+      type: String,
+      enum: ["Regular", "VIP", "VVIP", "Platinum", "Gold", "Silver"],
+      required: true
+   },
+
    quantity: {
     type: Number,
     required: true,
