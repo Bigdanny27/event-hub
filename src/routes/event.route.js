@@ -17,3 +17,4 @@ router.patch("/restore/:id", authenticate, authorize("admin"), restoreEvent)
 
 
 export default router
+
