@@ -10,7 +10,7 @@ const router = Router()
 router.post("/", authenticate, authorize("admin"), validate(createCategorySchema), createCategory)
 router.get("/", getCategories)
 router.get("/:id", validate(getCategorySchema, "params"), getCategory)
-router.patch("/:id", authenticate, authorize("admin"), validate(updateCategorySchema), validate(getCategorySchema, "params"), updateCategory)
-router.delete("/:id", authenticate, authorize("admin"), validate(deleteCategorySchema, "params"), deleteCategory)
+router.patch("/:id", validate(updateCategorySchema), authenticate, authorize("admin"), validate(getCategorySchema, "params"), updateCategory)
+router.delete("/:id", validate(deleteCategorySchema, "params"), authenticate, authorize("admin"), deleteCategory)
 
 export default router
