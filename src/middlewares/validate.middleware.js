@@ -1,13 +1,18 @@
 import zod from "zod"
 
-
-
-export const validate = (schema) => {
+export const validate = (schema, source = "body") => {
     return (req, res, next) => {
-        const result = schema.safeParse(req.body)
+        let target
+        if (source === "params") {
+            target = req.params
+        } else if (source === "query") {
+            target = req.query
+        } else {
+            target = req.body
+        }
+        const result = schema.safeParse(target)
 
-
-        if(!result.success) {
+        if (!result.success) {
             return res.status(400).json({
                 success: false,
                 message: "Validation failed",
@@ -15,9 +20,15 @@ export const validate = (schema) => {
             })
         }
 
-        req.body = result.data;
+        if (source === "params") {
+            req.params = result.data
+        } else if (source === "query") {
+            req.query = result.data
+        } else {
+            req.body = result.data
+        }
 
         next()
-    };
-};
+    }
+}
 
