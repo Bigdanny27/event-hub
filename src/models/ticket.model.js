@@ -13,7 +13,7 @@ const ticketSchema = new mongoose.Schema({
     trim: true
    },
    price: {
-    type: String,
+    type: Number,
     required: true,
     min: 0
    },

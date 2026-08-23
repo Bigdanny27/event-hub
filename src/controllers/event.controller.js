@@ -10,12 +10,6 @@ export const createEvent = async (req, res) => {
             return res.status(400).json({
         message: "All field are required before creating an event"})
 
-        const existingEvent = await Event.findOne({ title })
-        if(existingEvent){
-            return res.status(400).json({
-                message: "Event already exists"
-            })
-        }
         const event = await Event.create({
             title,
             description,

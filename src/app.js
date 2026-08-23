@@ -3,6 +3,7 @@ import authRouter from "./routes/auth.route.js"
 import eventRouter from "./routes/event.route.js"
 import userRouter from "./routes/user.route.js"
 import categoryRouter from "./routes/category.route.js"
+import ticketRouter from "./routes/ticket.route.js"
 
 
 const app = express()
@@ -13,6 +14,7 @@ app.use("/api/auth", authRouter)
 app.use("/api/event", eventRouter)
 app.use("/api/users", userRouter)
 app.use("/api/category", categoryRouter)
+app.use("/api/ticket", ticketRouter)
 
 
 
