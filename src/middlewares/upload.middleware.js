@@ -18,7 +18,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'school-management-uploads', // Folder name in your Cloudinary dashboard
+    folder: 'event-hub-uploads', // Folder name in your Cloudinary dashboard
     allowed_formats: ['jpg', 'png', 'jpeg', 'pdf'], // Restrict file types
   },
 });
