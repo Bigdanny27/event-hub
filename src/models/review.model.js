@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { required } from "zod/mini"
 
 
 const reviewSchema = new mongoose.Schema({
@@ -20,7 +21,8 @@ const reviewSchema = new mongoose.Schema({
     },
     comment: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     }
 },{timestamps})
 

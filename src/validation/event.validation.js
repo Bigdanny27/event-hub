@@ -18,7 +18,7 @@ export const updateEventSchema = z.object({
     date: z.coerce.string().datetime().optional(),
     time: z.coerce.string().min(4).max(10).optional(),
     category: z.coerce.string().min(1).optional(),
-    capacity:  z.coerce.number().min(1).max(10000),
+    capacity:  z.coerce.number().min(1).max(50000),
     availableTickets: z.coerce.number().min(1).max(10000)
 }).strict()
 
