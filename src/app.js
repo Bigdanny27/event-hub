@@ -4,6 +4,9 @@ import eventRouter from "./routes/event.route.js"
 import userRouter from "./routes/user.route.js"
 import categoryRouter from "./routes/category.route.js"
 import ticketRouter from "./routes/ticket.route.js"
+import bookingRouter from "./routes/booking.route.js"
+import paymentRouter from "./routes/payment.route.js"
+import reviewRouter from "./routes/review.route.js"
 
 
 const app = express()
@@ -15,6 +18,9 @@ app.use("/api/event", eventRouter)
 app.use("/api/users", userRouter)
 app.use("/api/category", categoryRouter)
 app.use("/api/ticket", ticketRouter)
+app.use("/api/booking", bookingRouter)
+app.use("/api/payment", paymentRouter)
+app.use("/api/review", reviewRouter)
 
 
 

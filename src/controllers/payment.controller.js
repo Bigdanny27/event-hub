@@ -5,7 +5,7 @@ import Booking from "../models/booking.model.js"
 
 
 
-export const createPayment = async (req, res) => {
+export const makePayment = async (req, res) => {
    try {
      const { bookingId } = req.params
     

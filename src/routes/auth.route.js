@@ -12,7 +12,7 @@ router.post("/register", validate(registerUserSchema), uploadCloudinary.single("
 router.post("/login", rateLimiter, validate(loginUserSchema), loginUser)
 router.post("/logout", logoutUser)
 router.post("/verify-email", rateLimiter, validate(verifyEmailSchema), verifyEmail)
-router.patch("/change-password", authenticate, rateLimiter, validate(changePasswordSchema), changePassword)
+router.patch("/change-password", validate(changePasswordSchema), authenticate, rateLimiter,  changePassword)
 router.post("/forgot-password", rateLimiter, validate(forgotPasswordSchema), forgotPassword)
 router.post("/reset-password", rateLimiter, validate(resetPasswordSchema), resetPassword)
 

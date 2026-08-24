@@ -10,5 +10,5 @@ export const findTicketSchema = z.object({
 
 export const createBookingSchema = z.object({
     quantity: z.coerce.string().min(1, "Quantity must be atleast one"),
-    totalAmount: z.coerce.string()
+    totalAmount: z.coerce.string().min(1)
 }).strict()

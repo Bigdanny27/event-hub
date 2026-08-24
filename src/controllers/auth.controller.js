@@ -194,7 +194,7 @@ export const forgotPassword = async (req, res) => {
         await user.save();
 
         // 4. Send the OTP via Email
-        const subject = 'School-Management - Password Reset Request';
+        const subject = 'Event-hub - Password Reset Request';
         
         // Fallback text version for email clients that don't support HTML
         const text = `Hi ${user.name}, your password reset OTP is ${otp}. It expires in 10 minutes.`; 
