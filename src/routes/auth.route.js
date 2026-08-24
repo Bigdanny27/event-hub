@@ -1,5 +1,5 @@
 import {Router} from "express"
-import {loginUser, registerUser,logoutUser, changePassword, forgotPassword, resetPassword, verifyEmail} from "../controllers/auth.controller.js"
+import {loginUser, registerUser, logoutUser, changePassword, forgotPassword, resetPassword, verifyEmail} from "../controllers/auth.controller.js"
 import { uploadCloudinary } from "../middlewares/upload.middleware.js"
 import { validate } from "../middlewares/validate.middleware.js"
 import { registerUserSchema, loginUserSchema, resetPasswordSchema, forgotPasswordSchema, changePasswordSchema, verifyEmailSchema } from "../validation/auth.validation.js"
