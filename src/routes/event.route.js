@@ -8,7 +8,7 @@ import { createEventSchema, updateEventSchema, getOneEventSchema, getAllEventsSc
 
 const router = Router()
 
-router.post("/", validate(createEventSchema), authenticate, authorize("organizer", "admin"), uploadCloudinary.single("bannerImage"), createEvent)
+router.post("/", validate(createEventSchema), authenticate, authorize("organizer"), uploadCloudinary.single("bannerImage"), createEvent)
 router.get("/", getAllEvents)
 router.get("/:id", getOneEvent)
 router.patch("/:id", validate(updateEventSchema), authenticate, authorize("admin"), updateEvent)

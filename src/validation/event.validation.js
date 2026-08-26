@@ -4,7 +4,7 @@ export const createEventSchema = z.object({
     title: z.coerce.string().min(2).max(100),
     description: z.coerce.string().min(10).max(2000),
     location: z.coerce.string().min(2).max(200),
-    date:z.coerce.string().datetime(),
+    date:z.coerce.date(),
     time: z.coerce.string().min(4).max(10),
     category: z.coerce.string().min(1),
     capacity:  z.coerce.number().min(1).max(10000),
