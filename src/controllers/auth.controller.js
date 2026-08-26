@@ -26,6 +26,8 @@ export const registerUser = async (req, res) => {
 
         const otp = Math.floor(100000 + Math.random() * 900000).toString()
 
+        console.log("Verification OTP:", otp)
+
         const user = await User.create({
             name,
             lastname,
@@ -36,8 +38,6 @@ export const registerUser = async (req, res) => {
             verificationOtp: otp,
             verificationOtpExpires: new Date(Date.now() + 10 * 60 * 1000)
         })
-
-        console.log("Verification OTP:", otp)
 
         return res.status(201).json({
             message: "user successfully created", 
