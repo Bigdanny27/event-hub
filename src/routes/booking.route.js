@@ -8,12 +8,12 @@ import { validate } from "../middlewares/validate.middleware.js"
 
 const router = Router()
 
-router.get("/:id", findEvent)
-router.get("/find-ticket/:id", findTicket)
-router.get("/tickets/:id/availability", checkTicketAvailability)
+router.get("/find-event/:eventId", findEvent)
+router.get("/find-ticket/:ticketId", findTicket)
+router.get("/tickets/:ticketId/availability", checkTicketAvailability)
 router.post("/bookings/calculate-price", calculateTotalPrice)
-router.post("/", validate(createBookingSchema), authenticate, authorize("customer"), createBooking)
-router.patch("/tickets/:id/reduce-quantity", reduceTicketQuantity)
-router.post("/bookings/:id/payment", createPaymentRecord)
+router.post("/:eventId/:ticketId", validate(createBookingSchema), authenticate, authorize("customer", "organizer"), createBooking)
+router.patch("/tickets/:ticketId/reduce-quantity", reduceTicketQuantity)
+router.post("/bookings/:bookingId/payment", authenticate, createPaymentRecord)
 
 export default router
