@@ -25,11 +25,11 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
      email: z.string().trim().toLowerCase().email(),
-    otp: z.string().length(6, "OTP must be 6 digits").regex(/^\d+$/, "OTP must contain only numbers"),
+    otp: z.number().min(6, "OTP must be 6 digits"),
     newPassword: z.string().min(12).max(128),
 }).strict()
 
 export const verifyEmailSchema = z.object({
     email: z.string().trim().toLowerCase().email(),
-    otp: z.string().length(6, "OTP must be 6 digits").regex(/^\d+$/, "OTP must contain only numbers"),
+    otp: z.number().min(6, "OTP must be 6 digits"),
 }).strict()

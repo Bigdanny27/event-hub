@@ -24,14 +24,20 @@ export const registerUser = async (req, res) => {
 
         const avatar = req.file?.path || ""
 
+        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+
         const user = await User.create({
             name,
             lastname,
             email,
             password: hashedPassword,
             role: role,
-            avatar
+            avatar,
+            verificationOtp: otp,
+            verificationOtpExpires: new Date(Date.now() + 10 * 60 * 1000)
         })
+
+        console.log("Verification OTP:", otp)
 
         return res.status(201).json({
             message: "user successfully created", 
