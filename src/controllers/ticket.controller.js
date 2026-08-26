@@ -7,7 +7,8 @@ import User from "../models/user.model.js";
 
 export const createTicket = async (req, res) => {
     try {
-        const { name, price, quantity, ticketType, } = req.body
+        const { eventId } =req.params
+        const { name, price, quantity, ticketType} = req.body
 
         if( !name || !price || !quantity || !ticketType) {
             return res.status(400).json({
@@ -15,7 +16,7 @@ export const createTicket = async (req, res) => {
             })
         }
         const ticket = await Ticket.create({
-            event: req.params.eventId,
+            event: eventId,
             name,
             price,
             quantity,
