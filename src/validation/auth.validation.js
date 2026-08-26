@@ -4,13 +4,13 @@ export const registerUserSchema = z.object({
     name: z.string().min(2).max(50),
     lastname: z.string().min(2).max(50),
     email: z.string().trim().toLowerCase().email(),
-    password: z.string().min(12, "minimum of 12 characters").max(128),
+    password: z.string().min(4, "minimum of 4 characters").max(128),
     role: z.string().optional(),
 }).strict()
 
 export const loginUserSchema = z.object({
     email: z.string().trim().toLowerCase().email(),
-    password: z.string().min(12).max(128),
+    password: z.string().min(4).max(128),
 }).strict()
 
 export const changePasswordSchema = z.object({
