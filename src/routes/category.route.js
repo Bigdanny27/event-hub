@@ -7,7 +7,7 @@ import { createCategorySchema, updateCategorySchema, getCategorySchema, deleteCa
 
 const router = Router()
 
-router.post("/", authenticate, authorize("admin"), validate(createCategorySchema), createCategory)
+router.post("/", validate(createCategorySchema), authenticate, authorize("organizer", "admin"),  createCategory)
 router.get("/", getCategories)
 router.get("/:id", validate(getCategorySchema, "params"), getCategory)
 router.patch("/:id", validate(updateCategorySchema), authenticate, authorize("admin"), validate(getCategorySchema, "params"), updateCategory)

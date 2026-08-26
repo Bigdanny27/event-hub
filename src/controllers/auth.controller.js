@@ -24,7 +24,7 @@ export const registerUser = async (req, res) => {
 
         const avatar = req.file?.path || ""
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString()
+        const otp = Math.floor(100000 + Math.random() * 900000)
 
         console.log("Verification OTP:", otp)
 

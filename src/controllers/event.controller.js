@@ -5,7 +5,7 @@ import User from "../models/user.model.js"
 
 export const createEvent = async (req, res) => {
     try {
-        const {title, description, location, date, time, capacity, availableTickets} = req.body
+        const {title, description, location, date, time, category, capacity, availableTickets} = req.body
         if(!title || !description || !location || !date || !time || !category || !capacity || !availableTickets)
             return res.status(400).json({
         message: "All field are required before creating an event"})
@@ -16,11 +16,12 @@ export const createEvent = async (req, res) => {
             location,
             date,
             time,
-            category: req.params.category,
+            category,
             capacity,
             availableTickets,
+            status: "upcoming",
             bannerImage: req.file ? req.file.path : null,
-            organizer: req.user_id
+            organizer: req.user._id
         })
         return res.status(201).json({
             message: "Event created successfully",

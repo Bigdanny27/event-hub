@@ -38,7 +38,7 @@ console.log('EMAIL_HOST:', EMAIL_HOST, 'EMAIL_PORT:', EMAIL_PORT, 'EMAIL_SECURE:
 // A reusable function to send emails
 export const sendEmail = async (to, subject, text, html) => {
     const mailOptions = {
-        from: `"School-Management" <${process.env.EMAIL_USER}>`,
+        from: `"Event-hub" <${process.env.EMAIL_USER}>`,
         to,
         subject,
         text,
