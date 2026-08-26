@@ -14,13 +14,13 @@ const app = express()
 app.use(express.json())
 
 app.use("/api/auth", authRouter)
-app.use("/api/event", eventRouter)
+app.use("/api/events", eventRouter)
 app.use("/api/users", userRouter)
-app.use("/api/category", categoryRouter)
-app.use("/api/ticket", ticketRouter)
-app.use("/api/booking", bookingRouter)
-app.use("/api/payment", paymentRouter)
-app.use("/api/review", reviewRouter)
+app.use("/api/categorys", categoryRouter)
+app.use("/api/tickets", ticketRouter)
+app.use("/api/bookings", bookingRouter)
+app.use("/api/payments", paymentRouter)
+app.use("/api/reviews", reviewRouter)
 
 
 

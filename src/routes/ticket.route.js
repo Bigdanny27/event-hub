@@ -8,7 +8,7 @@ import { createTicketSchema, updateTicketSchema, deleteTicketSchema } from "../v
 
 const router = Router()
 
-router.post("/", validate(createTicketSchema), authenticate, authorize("organizer"), createTicket)
+router.post("/:eventId", validate(createTicketSchema), authenticate, authorize("organizer"), createTicket)
 router.get("/:id", getTicketsByEvent)
 router.patch("/:id", validate(updateTicketSchema), authenticate, authorize("organizer"), updateTicket)
 router.delete("/:id", validate(deleteTicketSchema), authenticate, authorize("organizer"))
