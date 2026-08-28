@@ -10,6 +10,8 @@ export const createBooking = async (req, res) => {
     try {
         const { eventId, ticketId } = req.params
         const { quantity } = req.body
+
+
         // Find event
         const event = await Event.findById(eventId)
 
