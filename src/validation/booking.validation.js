@@ -1,13 +1,8 @@
 import * as z from "zod"
 
-export const findEventSchema = z.object({
-    eventId: z.coerce.string().min(1)
-}).strict()
-
-export const findTicketSchema = z.object({
-    ticketId: z.coerce.string().min(1)
-}).strict()
 
 export const createBookingSchema = z.object({
-    quantity: z.coerce.number().min(1, "Quantity must be atleast one")
+    quantity: z.coerce.number().int("Quantity must be an integer").min(1, "Quantity must be atleast one"),
+    ticketId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ticket ID"),
+    eventId: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid event ID")
 }).strict()
