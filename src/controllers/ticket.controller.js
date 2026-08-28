@@ -42,8 +42,9 @@ export const getTicketsByEvent = async (req, res) => {
         .populate("organizer", "name lastname email")
         .populate("event", "title")
         
-        return res.status(201).json({
-            message: "Tickets retrieve successfully"
+        return res.status(200).json({
+            message: "Tickets retrieve successfully",
+            tickets
         })
     } catch (error) {
         res.status(500).json({
