@@ -1,6 +1,7 @@
 import mongoose from "mongoose"
 import Event from "../models/event.model.js"
 import User from "../models/user.model.js"
+import Category from "../models/category.model.js"
 
 
 export const createEvent = async (req, res) => {
@@ -10,13 +11,21 @@ export const createEvent = async (req, res) => {
             return res.status(400).json({
         message: "All field are required before creating an event"})
 
+        const categoryExists = await Category.findOne({ name: category });
+
+        if (!categoryExists) {
+            return res.status(404).json({
+                message: "Category not found"
+            })
+        }
+
         const event = await Event.create({
             title,
             description,
             location,
             date,
             time,
-            category,
+            category: categoryExists._id,
             capacity,
             availableTickets,
             status: "upcoming",
