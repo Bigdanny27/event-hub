@@ -9,7 +9,7 @@ import { validate } from "../middlewares/validate.middleware.js"
 
 const router = Router()
 
-router.post("/", validate(makePaymentSchema), authenticate, authorize("customer"), makePayment)
+router.post("/:bookingId", validate(makePaymentSchema), authenticate, authorize("customer"), makePayment)
 router.get("/", getMyPayments)
 router.get("/:id", getPayment)
 
