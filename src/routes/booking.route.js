@@ -8,7 +8,7 @@ import { validate } from "../middlewares/validate.middleware.js"
 
 const router = Router()
 
-router.post("/:eventId/:ticketId", validate(createBookingSchema), authenticate, authorize("customer", "organizer"), createBooking)
+router.post("/:eventId/:ticketId", validate(createBookingSchema), authenticate, authorize("customer"), createBooking)
 
 
 export default router

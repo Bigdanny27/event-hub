@@ -10,7 +10,7 @@ export const createReview = async (req, res) => {
      const { rating, comment } = req.body
 
     const existingReview = await Review.findOne({
-        user: req.user_.id,
+        user: req.user._id,
         event: req.params.eventId
     })
 
@@ -20,10 +20,10 @@ export const createReview = async (req, res) => {
         })
     }
     const review = await Review.create({
-        user: req.user_.id,
+        user: req.user._id,
         event: req.params.eventId,
-        rating,
-        comment
+        rating: rating,
+        comment: comment
     })
     return res.status(201).json({
         message: "Review created successfully",
@@ -31,20 +31,21 @@ export const createReview = async (req, res) => {
     })
    }  catch (error) {
        res.status(500).json({
-            message: "failed to create event",
+            message: "failed to create review",
             error: error.message
         })  
     }
     
 }
 
-export const getAllReviews = async (req, res) => {
+export const getReview = async (req, res) => {
     try {
-       
-        const review = await Review.find({ event: req.params.eventId })
+       const { eventId } = req.params
+
+        const review = await Review.find({ event: eventId })
         return res.status(200).json({
             message: "Reviews retrieved successfully",
-            reviews
+            review
         })
 
     } catch (error) {

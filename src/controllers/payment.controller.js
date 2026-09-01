@@ -12,19 +12,24 @@ export const makePayment = async (req, res) => {
     const booking = await Booking.findOne({
         _id: bookingId, 
         user: req.user._id
-    })
+    }).populate("ticket");
+
     if(!booking) {
         return res.status(404).json({
             message: "Booking not found"
         })
     }
     
-    const existingPayment = await Payment.findOne({booking: bookingId})
+    const existingPayment = await Payment.findOne({booking: bookingId })
+
     if(existingPayment) {
         return res.status(400).json({
             message: "Payment already exists"
         })
     }
+    // Calculate the payment amount
+    const amount = booking.ticket.price * booking.quantity;
+
      // Generate a fake payment reference
     const reference = `PAY-${Date.now()}-${Math.floor(
         Math.random() * 10000
@@ -34,7 +39,7 @@ export const makePayment = async (req, res) => {
     const payment = await Payment.create({
         user: req.user._id,
         booking: req.params.bookingId,
-        amount: booking.totalAmount,
+        amount: amount,
         reference,
         status: "successful",
         paymentDate: new Date()
@@ -51,26 +56,10 @@ export const makePayment = async (req, res) => {
     }
 }
 
-export const getMyPayments = async (req, res) => {
-    try {
-       const payments = await Payment.find({ user: req.user._id }).populate("booking").sort({ createdAt: -1 })
-       return res.status(200).json({
-        message: "Payments retrieved successfully",
-        payment
-       })
-
-    } catch (error) {
-       res.status(500).json({
-            message: "failed to retrieved payment",
-            error: error.message
-        })  
-    }
-}
-
 export const getPayment = async (req, res) => {
     try {
-        const { Id } = req.params
-        const payment = await Payment.findById(Id).populate("user", "name lastname email").populate("booking")
+        const { id } = req.params
+        const payment = await Payment.findById(id).populate("user", "name lastname email").populate("booking")
 
         if(!payment) {
             return res.status(404).json({
