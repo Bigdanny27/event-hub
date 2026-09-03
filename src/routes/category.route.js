@@ -5,8 +5,20 @@ import { createCategory, getCategories, getCategory, updateCategory, deleteCateg
 import { validate } from "../middlewares/validate.middleware.js"
 import { createCategorySchema, updateCategorySchema, getCategorySchema, deleteCategorySchema } from "../validation/category.validation.js"
 
+
 const router = Router()
 
+/**
+ * @openapi
+ * /api/categories:
+ *   get:
+ *     tags:
+ *       - Categories
+ *     summary: List categories
+ *     responses:
+ *       200:
+ *         description: Category list
+ */
 router.post("/", validate(createCategorySchema), authenticate, authorize("organizer", "admin"),  createCategory)
 router.get("/", getCategories)
 router.get("/:id", validate(getCategorySchema, "params"), getCategory)

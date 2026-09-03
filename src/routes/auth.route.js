@@ -8,7 +8,34 @@ import { authenticate } from "../middlewares/authentication.middleware.js"
 
 const router = Router()
 
+/**
+ * @openapi
+ * /api/auth/register:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Register a new user
+ *     requestBody:
+ *       required: true
+ *     responses:
+ *       201:
+ *         description: User registered
+ */
 router.post("/register", validate(registerUserSchema), uploadCloudinary.single("avatar"), registerUser)
+
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *       - Auth
+ *     summary: Login user and return JWT
+ *     requestBody:
+ *       required: true
+ *     responses:
+ *       200:
+ *         description: Logged in
+ */
 router.post("/login", rateLimiter, validate(loginUserSchema), loginUser)
 router.post("/logout", logoutUser)
 router.post("/verify-email", rateLimiter, validate(verifyEmailSchema), verifyEmail)

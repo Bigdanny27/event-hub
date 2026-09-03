@@ -7,12 +7,14 @@ import ticketRouter from "./routes/ticket.route.js"
 import bookingRouter from "./routes/booking.route.js"
 import paymentRouter from "./routes/payment.route.js"
 import reviewRouter from "./routes/review.route.js"
+import setupSwagger from "./swagger.js"
 
 
 const app = express()
 
 app.use(express.json())
-
+// Swagger/OpenAPI docs
+setupSwagger(app)
 app.use("/api/auth", authRouter)
 app.use("/api/events", eventRouter)
 app.use("/api/users", userRouter)

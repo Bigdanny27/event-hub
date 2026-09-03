@@ -8,8 +8,38 @@ import { createEventSchema, updateEventSchema, getOneEventSchema, getAllEventsSc
 
 const router = Router()
 
+/**
+ * @openapi
+ * /api/events:
+ *   get:
+ *     tags:
+ *       - Events
+ *     summary: Retrieve a list of events
+ *     responses:
+ *       200:
+ *         description: A JSON array of event objects
+ */
 router.post("/", validate(createEventSchema), authenticate, authorize("organizer"), uploadCloudinary.single("bannerImage"), createEvent)
 router.get("/", getAllEvents)
+/**
+ * @openapi
+ * /api/events/{id}:
+ *   get:
+ *     tags:
+ *       - Events
+ *     summary: Retrieve a single event by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Event object
+ *       404:
+ *         description: Event not found
+ */
 router.get("/:id", getOneEvent)
 router.patch("/:id", validate(updateEventSchema), authenticate, authorize("admin"), updateEvent)
 router.patch("/update/:id", validate(updateEventSchema), authenticate, authorize("organizer"),  updateOwnEvent)
