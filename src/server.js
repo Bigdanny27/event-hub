@@ -15,7 +15,7 @@ const startServer = async () => {
             console.log(`server running at http://localhost:${PORT}`)
         })
     } catch (error) {
-        console.log("server connection fail")
+        console.error("server connection fail:", error)
     }
 }
 
