@@ -131,41 +131,43 @@ export const changePassword = async (req, res) => {
 
 export const verifyEmail = async (req, res) => {
     try {
-        const {email, otp, } = req.body
-         const user = await User.findOne({ email })
-         if (!user) {
+        const { email, otp } = req.body
+        const normalizedOtp = String(otp).trim()
+
+        const user = await User.findOne({ email })
+        if (!user) {
             return res.status(404).json({
                 message: "User not found"
             })
-         }
-         if (user.isVerified) {
+        }
+        if (user.isVerified) {
             return res.status(400).json({
                 message: "Email is already verified"
             })
-         }
-         if (!user.verificationOTP) {
+        }
+        if (!user.verificationOtp) {
             return res.status(400).json({
                 message: "No verification OTP found"
             })
-         }
-         if (user.verificationOTPExpires < new Date()) {
+        }
+        if (user.verificationOtpExpires < new Date()) {
             return res.status(400).json({
                 message: "OTP has expired"
             })
-         }
-         if(user.verificationOTP !== otp) {
+        }
+        if (String(user.verificationOtp) !== normalizedOtp) {
             return res.status(400).json({
                 message: "Invalid OTP"
             })
-         }
+        }
 
-         user.isVerified = true;
-         user.verificationOTP = undefined
-         user.verificationOTPExpires = undefined
+        user.isVerified = true;
+        user.verificationOtp = undefined
+        user.verificationOtpExpires = undefined
 
-         await user.save()
+        await user.save()
 
-         return res.status(200).json({
+        return res.status(200).json({
             message: "Email verified successfully"
          })
 
@@ -240,22 +242,20 @@ export const forgotPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
+        const normalizedOtp = String(otp).trim();
 
         // 1. Find user by email and verify OTP matches AND hasn't expired
         const user = await User.findOne({
             email,
-            resetPasswordOtp: otp,
-            resetPasswordExpires: { $gt: Date.now() } // $gt means "greater than" (must be in the future)
+            resetPasswordOtp: normalizedOtp,
+            resetPasswordExpires: { $gt: Date.now() }
         });
 
         if (!user) {
             return res.status(400).json({ message: "Invalid or expired OTP" });
         }
 
-        // 2. Hash the new password (assuming you use bcrypt)
-        // const salt = await bcrypt.genSalt(10);
-        // user.password = await bcrypt.hash(newPassword, salt);
-        user.password = newPassword; // Replace with hashed password in real app
+        user.password = await hashPassword(newPassword);
 
         // 3. Clear the OTP fields so they can't be used again
         user.resetPasswordOtp = undefined;

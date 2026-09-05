@@ -1,5 +1,12 @@
 import * as z from "zod"
 
+const otpSchema = z.union([
+    z.string(),
+    z.number()
+]).transform((value) => String(value).trim()).refine((value) => /^\d{6}$/.test(value), {
+    message: "OTP must be 6 digits"
+})
+
 export const registerUserSchema = z.object({
     name: z.string().min(2).max(50),
     lastname: z.string().min(2).max(50),
@@ -25,11 +32,11 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
      email: z.string().trim().toLowerCase().email(),
-    otp: z.number().min(6, "OTP must be 6 digits"),
+    otp: otpSchema,
     newPassword: z.string().min(12).max(128),
 }).strict()
 
 export const verifyEmailSchema = z.object({
     email: z.string().trim().toLowerCase().email(),
-    otp: z.number().min(6, "OTP must be 6 digits"),
+    otp: otpSchema,
 }).strict()
