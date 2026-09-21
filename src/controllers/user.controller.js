@@ -1,70 +1,46 @@
-import User from "../models/user.model.js"
+import {
+  getAllUsersService,
+  deleteUserService,
+  uploadProfilePictureService,
+} from "../services/user.service.js";
 
+const handleServiceError = (error, res) => {
+  const statusCode = error.statusCode || 500;
+  return res.status(statusCode).json({
+    message: error.message || "internal server error",
+    ...(statusCode >= 500 ? { error: error.message } : {}),
+  });
+};
 
 export const getAllUsers = async (req, res) => {
-    try {
-        const users = await User.find().select("-password")
-        if(!users){
-            return res.status(404).json({
-                message: "no users found"
-            })
-        }
-        return res.status(200).json({
-            message: "users successfully found",
-            users
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: "internal server error",
-            error: error.message
-        })
-    }
-}
+  try {
+    const result = await getAllUsersService();
+    return res.status(result.statusCode).json({
+      message: result.message,
+      users: result.users,
+    });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
 
 export const deleteUser = async (req, res) => {
-    try {
-        const {id} = req.params
-        let user = await User.findByIdAndDelete(id)
-        if(!user){
-            return res.status(404).json({
-                message: "user not found"
-            })
-        }
-        await User.findByIdAndDelete(id)
-        return res.status(200).json({
-            message: "user successfully deleted"
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: "internal server error",
-            error: error.message
-        })
-    }
-}
+  try {
+    const result = await deleteUserService({ id: req.params.id });
+    return res.status(result.statusCode).json({ message: result.message });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
 
 export const uploadProfilePicture = async (req, res) => {
-    try {
-        // req.file is populated by the multer middleware
-        if (!req.file) {
-            return res.status(400).json({ message: "No file uploaded" });
-        }
-
-        // When using Cloudinary, the secure URL is provided in req.file.path
-        // If local, it will be the local file path (e.g., 'uploads/avatar-123.jpg')
-        const fileUrl = req.file.path; 
-
-        // Example: Update the user's document in the database
-        // await User.findByIdAndUpdate(req.user.id, { avatarUrl: fileUrl });
-
-        return res.status(200).json({
-            message: "File uploaded successfully",
-            url: fileUrl
-        });
-
-    } catch (error) {
-        return res.status(500).json({
-            message: "Error uploading file",
-            error: error.message
-        });
-    }
+  try {
+    const result = await uploadProfilePictureService({ file: req.file });
+    return res.status(result.statusCode).json({
+      message: result.message,
+      url: result.url,
+    });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
 };

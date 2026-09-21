@@ -1,101 +1,68 @@
-import mongoose from "mongoose";
-import Event from "../models/event.model.js"
-import Ticket from "../models/ticket.model.js"
-import User from "../models/user.model.js";
+import {
+  createTicketService,
+  getTicketsByEventService,
+  updateTicketService,
+  deleteTicketService,
+} from "../services/ticket.service.js";
 
-
+const handleServiceError = (error, res) => {
+  const statusCode = error.statusCode || 500;
+  return res.status(statusCode).json({
+    message: error.message || "internal server error",
+    ...(statusCode >= 500 ? { error: error.message } : {}),
+  });
+};
 
 export const createTicket = async (req, res) => {
-    try {
-        const { eventId } =req.params
-        const { name, price, quantity, ticketType} = req.body
+  try {
+    const result = await createTicketService({
+      eventId: req.params.eventId,
+      ...req.body,
+      organizerId: req.user._id,
+    });
 
-        if( !name || !price || !quantity || !ticketType) {
-            return res.status(400).json({
-                message: "All field are required to create a ticket"
-            })
-        }
-        const ticket = await Ticket.create({
-            event: eventId,
-            name,
-            price,
-            quantity,
-            availableQuantity: quantity,
-            ticketType,
-            organizer: req.user._id
-        })
-        return res.status(201).json({
-            message: "Tickets successfully created",
-            ticket
-        })
-    } catch (error) {
-       res.status(500).json({
-            message: "failed to create ticket",
-            error: error.message
-        })  
-    }
-}
+    return res.status(result.statusCode).json({
+      message: result.message,
+      ticket: result.ticket,
+    });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
+
 export const getTicketsByEvent = async (req, res) => {
-    try {
-        const { eventId } = req.params
-        const tickets = await Ticket.find({ event: eventId})
-        .populate("organizer", "name lastname email")
-        .populate("event", "title")
-        
-        return res.status(200).json({
-            message: "Tickets retrieve successfully",
-            tickets
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: "internal server error",
-            error: error.message
-        })
-    }
-}
+  try {
+    const result = await getTicketsByEventService({ eventId: req.params.eventId });
+    return res.status(result.statusCode).json({
+      message: result.message,
+      tickets: result.tickets,
+    });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
 
 export const updateTicket = async (req, res) => {
-    try {
-        const { event, name, price, quantity, ticketType } = req.body
-        if (!event || !name || !price || !quantity || !ticketType) {
-            return res.status(400).json({
-                message: "All fields are required before updating a ticket"
-            })
-        }
+  try {
+    const result = await updateTicketService({
+      id: req.params.id,
+      ticketData: req.body,
+    });
 
-        const { id } = req.params
-        const updatedTicket = await Ticket.findByIdAndUpdate(id, req.body, { new: true })
-
-        return res.status(200).json({
-            message: "Ticket updated successfully",
-            event: updatedEvent
-        })
-    } catch (error) {
-        return res.status(500).json({
-            message: "Failed to update ticket",
-            error: error.message
-        })
-    }
-}
+    return res.status(result.statusCode).json({
+      message: result.message,
+      ticket: result.ticket,
+    });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
 
 export const deleteTicket = async (req, res) => {
- try {
-    const { id } = req.params;
-    const ticket = await Ticket.findById(id);
-    if(!ticket){
-        return res.status(404).json({
-            message: "ticket not found"
-        })
-    }
-    await ticket.deleteOne()
-    
-    return res.status(200).json({
-        message: "ticket deleted successfully"
-    })
- } catch (error) {
-    res.status(500).json({
-            message: "failed to delete ticket",
-            error: error.message
-        })
- }
-}
+  try {
+    const result = await deleteTicketService({ id: req.params.id });
+    return res.status(result.statusCode).json({ message: result.message });
+  } catch (error) {
+    return handleServiceError(error, res);
+  }
+};
